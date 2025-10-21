@@ -7,7 +7,7 @@ A game-like Android app that calculates the number of days a challenge must be c
 1. **Roll the Dice**: Tap the "Roll Dice" button to roll three dice
 2. **Dice Meanings**:
    - **First Dice**: Determines the number of days multiplied by the current multiplier
-   - **Second Dice**: Determines if the challenge is complete (4+ means complete) and adds to multiplier for next round
+   - **Second Dice**: Determines if the challenge is complete (1 means complete) and adds to multiplier for next round
    - **Third Dice**: Adds its value to the multiplier for the next round
 
 ## Special Rules
