@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -78,16 +78,24 @@ private fun AnimatedDice(
         },
         label = "rotation"
     )
-    
-    val scale by animateFloatAsState(
-        targetValue = if (isRolling) 1.2f else 1f,
-        animationSpec = if (isRolling) {
-            tween(500, delayMillis = animationDelay, easing = FastOutSlowInEasing)
+
+    val scale = remember { Animatable(1f) }
+
+    LaunchedEffect(isRolling) {
+        if (isRolling) {
+            scale.animateTo(
+                targetValue = 1.2f,
+                animationSpec = tween(1000, easing = FastOutSlowInEasing)
+            )
+            scale.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(1000, easing = FastOutSlowInEasing)
+            )
         } else {
-            tween(200, easing = FastOutSlowInEasing)
-        },
-        label = "scale"
-    )
+            // Ensure it returns to 1f when not rolling
+            scale.animateTo(1f)
+        }
+    }
     
     Column(
         modifier = modifier.padding(8.dp),
@@ -96,7 +104,10 @@ private fun AnimatedDice(
         Box(
             modifier = Modifier
                 .size(60.dp)
-                .scale(scale)
+                .graphicsLayer {
+                    scaleX = scale.value
+                    scaleY = scale.value
+                }
                 .rotate(rotation)
                 .clip(RoundedCornerShape(8.dp))
                 .background(if (isFixed) MaterialTheme.colorScheme.primaryContainer else Color.White)
